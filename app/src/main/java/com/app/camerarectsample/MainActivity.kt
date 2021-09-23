@@ -140,33 +140,33 @@ class MainActivity : AppCompatActivity() {
             imageCapture = ImageCapture.Builder()
                 .build()
 
-            val imageAnalyzer = ImageAnalysis.Builder()
-                .build()
-                .also {
-                    it.setAnalyzer(cameraExecutor,
-                        QrCodeAnalyzer { qrResult ->
-                            cameraBinding.viewFinder.post {
-                                Log.d("QRCodeAnalyzer", "Barcode scanned: ${qrResult.text}")
-                                Toast.makeText(
-                                    this,
-                                    "Tag Added: ${qrResult.text}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-
-                                onQrDetected(qrResult.text)
-
-                            }
-                            Thread.sleep(5000)
-                        })
-                }
+//            val imageAnalyzer = ImageAnalysis.Builder()
+//                .build()
+//                .also {
+//                    it.setAnalyzer(cameraExecutor,
+//                        QrCodeAnalyzer { qrResult ->
+//                            cameraBinding.viewFinder.post {
+//                                Log.d("QRCodeAnalyzer", "Barcode scanned: ${qrResult.text}")
+//                                Toast.makeText(
+//                                    this,
+//                                    "Tag Added: ${qrResult.text}",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//
+//                                onQrDetected(qrResult.text)
+//
+//                            }
+//                            Thread.sleep(5000)
+//                        })
+//                }
 
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-            val viewPort = ViewPort.Builder(Rational(350, 100), Surface.ROTATION_0).build()
+            val viewPort = ViewPort.Builder(Rational(125, 343), Surface.ROTATION_0).build()
             val useCaseGroup = UseCaseGroup.Builder()
                 .addUseCase(preview)
-                .addUseCase(imageAnalyzer)
+//                .addUseCase(imageAnalyzer)
                 .addUseCase(imageCapture!!)
                 .setViewPort(viewPort)
                 .build()
@@ -179,8 +179,11 @@ class MainActivity : AppCompatActivity() {
                 cameraProvider.bindToLifecycle(
                     this, cameraSelector, useCaseGroup
                 )
+//                cameraProvider.bindToLifecycle(
+//                    this, cameraSelector, preview, imageCapture, imageAnalyzer
+//                )
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture, imageAnalyzer
+                    this, cameraSelector, preview, imageCapture
                 )
 
             } catch (exc: Exception) {
